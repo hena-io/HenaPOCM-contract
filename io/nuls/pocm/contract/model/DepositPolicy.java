@@ -1,7 +1,7 @@
 package io.nuls.pocm.contract.model;
 
 public class DepositPolicy {
-    public long policyTime; //예치기간
+    public long policyTime;
     public double rewardRate;
 
       public DepositPolicy(long policyTime, double rewardRate){

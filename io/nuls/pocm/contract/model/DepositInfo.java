@@ -9,16 +9,13 @@ import static io.nuls.contract.sdk.Utils.require;
 public class DepositInfo {
 
     private long userID;
-    //抵押者地址 모기지 주소
+
     private String  depositorAddress;
 
-    // 抵押金额 모기지 금액
     private BigInteger depositTotalAmount;
 
-    //抵押笔数 모기지 수
     private int depositCount;
 
-    //抵押详细信息列表 모기지 세부 정보 목록
     private Map<Long,DepositDetailInfo> depositDetailInfos =new HashMap<Long,DepositDetailInfo>();
 
     public DepositInfo(){
