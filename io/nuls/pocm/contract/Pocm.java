@@ -241,7 +241,7 @@ public class Pocm extends Ownable implements Contract {
         for (Long key : detailInfos.keySet()) {
             DepositDetailInfo detailInfo = detailInfos.get(key);
             BigInteger reward = calcDepositDetailReward(detailInfo);
-            String address = depositInfo.getDepositorAddress();
+            String address = detailInfo.getMiningAddress();
             totalReward = totalReward.add(reward);
             if( rewardResult.containsKey(address)){
                 rewardResult.put(address,rewardResult.get(address).add(reward));
@@ -357,7 +357,7 @@ public class Pocm extends Ownable implements Contract {
             require(checkDepositLocked(detailInfo) == -1, "The deposit has not passed the minimum period.");
 
             BigInteger reward = calcDepositDetailReward(detailInfo);
-            String address = depositInfo.getDepositorAddress();
+            String address = detailInfo.getMiningAddress();
             rewardResult.put(address,reward);
         }
 
