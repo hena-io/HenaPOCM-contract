@@ -97,12 +97,10 @@ public class DepositInfo {
             index++;
         }
 
-        return String.format("{depositTotalAmount:%s, depositorAddress:%s, depositCount:%s, depositDetailInfos:[%s]}",
-                depositTotalAmount,
-                depositorAddress,
-                depositCount,
-                detailInfosStr
-                );
+        return "{depositTotalAmount:"+depositTotalAmount+
+                ", depositorAddress:"+depositorAddress+
+                ", depositCount:"+depositCount+
+                ", depositDetailInfos:["+detailInfosStr+"]}";
     }
 
 }

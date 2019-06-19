@@ -24,14 +24,16 @@ public class Pocm extends Ownable implements Contract {
 
     private final long createTime;
     private BigInteger minimumDeposit;
-    private int totalDepositAddressCount;
+    private long totalDepositAddressCount;
     private long minimumLocked;
+    private double minimumRewardRate = 0.1;
 
     private Map<String, DepositInfo> depositUsers = new HashMap<String, DepositInfo>();
     private Map<Integer, DepositPolicy> deposiPolicys = new HashMap<Integer, DepositPolicy>();
 
-    //private final long DAY_SEC = 60*60*24;
-    private final long DAY_SEC = 2;
+    //test
+    //private final long DAY_SEC = 2;
+    private final long DAY_SEC = 60*60*24;
     private final long MONTH_SEC = DAY_SEC*30;
     private final long YEAR_SEC = MONTH_SEC*12;
     private BigInteger totalDeposit;
@@ -64,6 +66,9 @@ public class Pocm extends Ownable implements Contract {
         createTime = getTime();
         totalDeposit = BigInteger.ZERO;
         totalDepositAddressCount = 0;
+
+        //test
+        //minimumDeposit = PocmUtil.toNa(new BigDecimal("0.1")); //0.1 nuls
         minimumDeposit = PocmUtil.toNa(BigDecimal.valueOf(100)); //100 nuls
         totHena = PocmUtil.toNa(BigDecimal.valueOf(50000000)); //50,000,000 Hena
         remainHena = totHena;
@@ -78,9 +83,8 @@ public class Pocm extends Ownable implements Contract {
         int[] month ={3, 6, 9, 12};//month
         double[] rewardRate = {0.045, 0.125, 0.2625, 0.4};//18%, 25%, 35%, 40% rate of year
         setDepositPolicy(month,rewardRate);
+
     }
-
-
 
     public void setRewardTokenLockMonth(long lockMonth){
         requireManager(Msg.sender());
@@ -305,14 +309,14 @@ public class Pocm extends Ownable implements Contract {
         if (havingTime >= policy.policyTime) {
             return henaDepositAmount.multiply(BigDecimal.valueOf(policy.rewardRate)).toBigInteger();
         } else if (havingTime >= policy.policyTime/2) {
-            return henaDepositAmount.multiply(minimumRewardRate(policy, havingTime)).toBigInteger();
+            return henaDepositAmount.multiply(minimumRewardRateCalc(havingTime)).toBigInteger();
         }
         return BigInteger.ZERO;
     }
 
-    private BigDecimal minimumRewardRate(DepositPolicy policy, long havingTime){
+    private BigDecimal minimumRewardRateCalc(long havingTime){
 
-        return BigDecimal.valueOf(0.1).multiply(BigDecimal.valueOf(havingTime)).divide(BigDecimal.valueOf(YEAR_SEC), decimals, BigDecimal.ROUND_DOWN);
+        return BigDecimal.valueOf(minimumRewardRate).multiply(BigDecimal.valueOf(havingTime)).divide(BigDecimal.valueOf(YEAR_SEC), decimals, BigDecimal.ROUND_DOWN);
     }
 
     private BigInteger calcDepositDetailReward( DepositDetailInfo detailInfo){
@@ -380,7 +384,7 @@ public class Pocm extends Ownable implements Contract {
             depositPolicysStr+= deposiPolicys.get(key).toString();
             index++;
         }
-        return String.format("{months:[%s], depositPolicys:[%s]}", monthsStr, depositPolicysStr);
+        return "{months:["+monthsStr+"], depositPolicys:["+depositPolicysStr+"]}";
     }
 
     @View
@@ -393,8 +397,7 @@ public class Pocm extends Ownable implements Contract {
             depositUsersStr += depositUsers.get(key).toString();
             index++;
         }
-
-        return String.format("{depositUsers:[%s]}", depositUsersStr);
+        return "{depositUsers:["+depositUsersStr+"]}";
     }
 
     @View
@@ -416,7 +419,7 @@ public class Pocm extends Ownable implements Contract {
     }
 
     @View
-    public DepositInfo getDepositInfo(@Required Address address){
+    public DepositInfo getDepositInfoStr(@Required Address address){
         return getDepositInfo(address.toString());
     }
 
@@ -426,7 +429,7 @@ public class Pocm extends Ownable implements Contract {
     }
 
     @View
-    public int totalDepositAddressCount() {
+    public long totalDepositAddressCount() {
         return totalDepositAddressCount;
     }
 
@@ -444,6 +447,17 @@ public class Pocm extends Ownable implements Contract {
     public long minimumLocked() {
         return this.minimumLocked;
     }
+    @View
+    public double minimumRewardRate() {
+        return this.minimumRewardRate;
+    }
+
+    @View
+    public BigInteger getRemainHena(){
+        return this.remainHena;
+    }
+
+
 
     @View
     public long getTime(){

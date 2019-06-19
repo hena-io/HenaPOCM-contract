@@ -11,6 +11,6 @@ public class DepositPolicy {
 
       @Override
       public String toString(){
-          return String.format("{policyTime:%s, rewardRate:%s}", policyTime, rewardRate);
+          return "{policyTime:"+policyTime+", rewardRate:"+rewardRate+"}";
       }
 }

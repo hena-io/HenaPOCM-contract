@@ -55,12 +55,11 @@ public class DepositDetailInfo {
 
     @Override
     public String toString(){
-        return String.format("{depositNumber:%s, miningAddress:%s, depositAmount:%s, depositTime:%s, depositPolicy:%s}",
-                depositNumber,
-                miningAddress,
-                depositAmount,
-                depositTime,
-                getDepositPolicy().toString()
-        );
+
+        return "{depositNumber:"+depositNumber+
+                ", miningAddress:"+miningAddress+
+                ", depositAmount:"+depositAmount+
+                ", depositTime:"+depositTime+
+                ", depositPolicy:"+getDepositPolicy().toString()+"}";
     }
 }
